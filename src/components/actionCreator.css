@@ -1,0 +1,25 @@
+.action-creator-form {
+    height: 90vh;
+    overflow-y: scroll;
+    min-width: 450px;
+}
+
+.action-creator-token-info {
+    width: calc(100% - 2em);
+    height: 140px;
+    padding: 1em;
+}
+
+.action-creator-textfield {
+    /*min-width: 400px;*/
+    width: 100%;
+}
+
+.action-creator-textarea {
+    min-width: 700px;
+    border: 1px solid #fff;
+    background-color: #282c34;
+    color: #fff;
+    padding: 1em;
+    border-radius: 4px;
+}
