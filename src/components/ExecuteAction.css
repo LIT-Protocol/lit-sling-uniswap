@@ -1,0 +1,37 @@
+.execute-action-creator-form {
+    /*height: 90vh;*/
+    overflow-y: scroll;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.execute-action-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.execute-action-textarea {
+    border: 1px solid #fff;
+    background-color: #282c34;
+    color: #fff;
+    height: 100%;
+}
+
+.execute-action-js-params {
+    height: 400px;
+    width: 35%;
+}
+
+.execute-action-code {
+    width: 65%;
+}
+
+.execute-action-output {
+    width: 80vw;
+    min-height: 290px;
+}
+

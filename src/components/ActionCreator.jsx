@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Stack, TextField, Typography } from "@mui/material";
-import './actionCreator.css';
+import './ActionCreator.css';
 import truncateAddress from "../functions/truncateAddress";
 import { LoadingButton } from "@mui/lab";
-import assembleTrade from "../functions/assembleTrade";
+import executableSwapCode from "../litSellFactory/executableSwapCode";
 import { ethers } from "ethers";
 import { generateSwapExactInputSingleCalldata } from "../pkp-dex-sdk/external/uniswap/swapExactInputSingle";
 import { generateApproveCalldata } from "../pkp-dex-sdk/external/erc20/approve";
 import ERC20ABI from "../ABIs/erc20Abi.json";
 import { getSwapCode } from "../litSellFactory/getSwapCode";
+import { refactoredSwapCode } from "../litSellFactory/refactoredSwapCode";
 
 const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
@@ -18,6 +19,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
   const [ amountToSell, setAmountToSell ] = useState('');
   const [ textArea, setTextArea ] = useState('');
   const [ litActionText, setLitActionText ] = useState('');
+  const [ litJsParams, setLitJsParams ] = useState('');
   const [ tokenInAmount, setTokenInAmount ] = useState('');
   const [ tokenOutAmount, setTokenOutAmount ] = useState('');
 
@@ -82,20 +84,30 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
     const approveCalldata = generateApproveCalldata(SWAP_ROUTER_ADDRESS, exactInputSingleParams.amountIn);
     const exactInputSingleCalldata = generateSwapExactInputSingleCalldata(exactInputSingleParams);
 
+    // comment in to actually run a swap
+    // await executableSwapCode(tradeConfig)
+
+    const polygonProvider = new ethers.providers.InfuraProvider('matic', '3a16fe149ab14c7995cdab5f2c1d616c');
+    const gasPrice = await polygonProvider.getGasPrice();
+    const chainId = tokenIn.chainId;
+    const nonceCount = await polygonProvider.getTransactionCount(pkp.address);
+
     const tradeConfig = {
       swapRouterAddress: SWAP_ROUTER_ADDRESS,
       tokenIn: tokenIn,
       authSig: authSig,
       providerUrl: providerUrl,
       pkp: pkp,
+      chainId,
+      gasPrice,
       approveCalldata,
-      exactInputSingleCalldata
+      exactInputSingleCalldata,
+      nonceCount
     }
 
-    // await assembleTrade(tradeConfig)
-    const litSellCode = getSwapCode();
-
+    const litSellCode = refactoredSwapCode();
     console.log('litSellCode', litSellCode);
+    setLitJsParams(prettifyText(tradeConfig));
     setLitActionText(litSellCode);
   }
 
@@ -104,7 +116,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
       <Stack spacing={2} direction={'row'}>
         <Card className={'action-creator-form'}>
           <CardHeader title={`PKP: ${truncateAddress(pkp.address)}`}/>
-          <CardContent>
+          <CardContent className={'action-creator-input'}>
             <Stack spacing={2}>
               <Typography variant={'h6'}>Create a Lit Action</Typography>
               <div>
@@ -126,7 +138,10 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
             {/*<LoadingButton loading={loading} color={'secondary'} variant={'outlined'}>Reset</LoadingButton>*/}
           </CardActions>
         </Card>
-        <textarea className={'action-creator-textarea'} value={litActionText}/>
+        <Stack spacing={2} direction={'column'}>
+          <textarea className={'action-creator-js-params'} value={litJsParams} onChange={(e) => true}/>
+          <textarea className={'action-creator-textarea'} value={litActionText} onChange={(e) => true}/>
+        </Stack>
       </Stack>
     </div>
   )

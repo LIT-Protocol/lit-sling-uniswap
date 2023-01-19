@@ -1,6 +1,6 @@
 .action-creator-form {
     height: 90vh;
-    overflow-y: scroll;
+    overflow-y: scroll !important;
     min-width: 450px;
 }
 
@@ -10,9 +10,23 @@
     padding: 1em;
 }
 
+.action-creator-input {
+}
+
 .action-creator-textfield {
     /*min-width: 400px;*/
     width: 100%;
+}
+
+.action-creator-js-params {
+    min-width: 700px;
+    border: 1px solid #fff;
+    background-color: #282c34;
+    color: #fff;
+    padding: 1em;
+    border-radius: 4px;
+    height: 35%;
+    overflow-y: scroll;
 }
 
 .action-creator-textarea {
@@ -22,4 +36,6 @@
     color: #fff;
     padding: 1em;
     border-radius: 4px;
+    height: 60%;
+    overflow-y: scroll;
 }

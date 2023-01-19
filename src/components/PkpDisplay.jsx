@@ -1,4 +1,4 @@
-import PkpCard from "./pkpCard";
+import PkpCard from "./PkpCard";
 import { Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
 import truncateAddress from "../functions/truncateAddress";
 
