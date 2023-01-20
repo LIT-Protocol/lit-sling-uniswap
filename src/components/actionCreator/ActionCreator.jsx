@@ -16,7 +16,7 @@ import LitJsSdk from "lit-js-sdk";
 const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
 
-function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
+function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   const [ loading, setLoading ] = useState(false);
   const [ amountToSell, setAmountToSell ] = useState('');
   const [ textArea, setTextArea ] = useState('');
@@ -26,6 +26,22 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
   const [ tokenOutAmount, setTokenOutAmount ] = useState('');
   const [ jsParams, setJsParams ] = useState(null);
   const [ output, setOutput ] = useState('');
+
+  // can be set to whatever you want
+  const [ tokenIn, setTokenIn ] = useState({
+    chainId: 137,
+    decimals: 18,
+    address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    symbol: 'WMATIC',
+    name: 'Wrapped Matic'
+  })
+  const [ tokenOut, setTokenOut ] = useState({
+    chainId: 137,
+    decimals: 6,
+    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    symbol: 'USDC',
+    name: 'USD//C'
+  })
 
   useEffect(() => {
     if (litActionText) {
@@ -166,13 +182,15 @@ function ActionCreator({pkp, provider, pkpWallet, authSig, tokenIn, tokenOut}) {
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
                 <div>
                   <Typography variant={'body'}>Token In - {tokenInAmount} {tokenIn.symbol}</Typography>
-                  <textarea className={'action-creator-token-info'} disabled value={prettifyText(tokenIn)}/>
+                  <textarea className={'action-creator-token-info'} value={prettifyText(tokenIn)}
+                            onChange={(e) => setTokenIn(e.target.value)}/>
                   <TextField className={'action-creator-textfield'} label={'Amount To Sell'} variant={'outlined'}
                              onChange={(e) => setAmountToSell(e.target.value)} value={amountToSell}/>
                 </div>
                 <div>
                   <Typography variant={'body'}>Token Out - {tokenOutAmount} {tokenOut.symbol}</Typography>
-                  <textarea className={'action-creator-token-info'} disabled value={prettifyText(tokenOut)}/>
+                  <textarea className={'action-creator-token-info'} value={prettifyText(tokenOut)}
+                            onChange={(e) => setTokenOut(e.target.value)}/>
                 </div>
               </Stack>
             </CardContent>

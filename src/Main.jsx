@@ -16,22 +16,6 @@ function Main() {
   const [ authSig, setAuthSig ] = useState(null);
   const [ errorObject, setErrorObject ] = useState(null);
 
-  // tokens are locked in, but can be set to whatever you want
-  const [ tokenIn, setTokenIn ] = useState({
-    chainId: 137,
-    decimals: 18,
-    address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
-    symbol: 'WMATIC',
-    name: 'Wrapped Matic'
-  })
-  const [ tokenOut, setToken1 ] = useState({
-    chainId: 137,
-    decimals: 6,
-    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-    symbol: 'USDC',
-    name: 'USD//C'
-  })
-
   useEffect(() => {
     getProvider()
   }, [])
@@ -104,9 +88,7 @@ function Main() {
         <ActionCreator provider={provider}
                        pkp={selectedPkp}
                        pkpWallet={pkpWallet}
-                       authSig={authSig}
-                       tokenIn={tokenIn}
-                       tokenOut={tokenOut}/>
+                       authSig={authSig}/>
       </div>
     )
   }
