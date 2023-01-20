@@ -9,15 +9,13 @@ import { decimalTohex, hexToDecimal, MultiETHFormat, wei2eth } from "./converter
  */
 export class PKPContract {
 
-  // @ts-ignore
+
   contract;
-  // @ts-ignore
+
   read;
 
   constructor() {
-    // @ts-ignore
     this.contract = ({})
-    // @ts-ignore
     this.read = ({})
   }
 
@@ -54,10 +52,8 @@ export class PKPContract {
  */
 export class ReadPKPContract {
 
-  // @ts-ignore
   contract
 
-  // @ts-ignore
   constructor(contract) {
     this.contract = contract;
   }

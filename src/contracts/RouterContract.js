@@ -6,15 +6,11 @@ import { getContract } from "./getContract";
  */
 export class RouterContract {
 
-  // @ts-ignore
   contract
-  // @ts-ignore
   read
 
   constructor() {
-    // @ts-ignore
     this.contract = ({})
-    // @ts-ignore
     this.read = ({})
   }
 
@@ -52,10 +48,8 @@ export class RouterContract {
  */
 export class ReadRouterContract {
 
-  // @ts-ignore
   contract;
 
-  // @ts-ignore
   constructor(contract) {
     this.contract = contract;
   }

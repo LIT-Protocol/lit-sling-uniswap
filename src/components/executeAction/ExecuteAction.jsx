@@ -71,43 +71,6 @@ function ExecuteAction() {
       setLoading(false);
       return;
     }
-
-    // const {approveTx, exactInputSingleTx} = executeRes.response;
-    // const {signatures} = executeRes;
-
-    // will only fire if both approve and swap transactions are sent back
-    // if (executeRes.response && Object.keys(executeRes.response).length > 0) {
-    //   // const encodedApproveSignature = ethers.utils.joinSignature({
-    //   //   r: "0x" + signatures['approveTx'].r,
-    //   //   s: "0x" + signatures['approveTx'].s,
-    //   //   recoveryParam: signatures['approveTx'].recid
-    //   // });
-    //   //
-    //   // const encodedExactInputSingleSignature = ethers.utils.joinSignature({
-    //   //   r: "0x" + signatures['exactInputSingleTx'].r,
-    //   //   s: "0x" + signatures['exactInputSingleTx'].s,
-    //   //   recoveryParam: signatures['exactInputSingleTx'].recid
-    //   // });
-    //   //
-    //   // setOutput(prettifyText(signatures.logs));
-    //   // const signedApproveTx = ethers.utils.serializeTransaction(approveTx, encodedApproveSignature);
-    //   // const signedExactInputSingleTx = ethers.utils.serializeTransaction(exactInputSingleTx, encodedExactInputSingleSignature);
-    //   const signedApproveTx = joinAndSignTx({litActionRes: executeRes, key: 'approveTx'});
-    //   const signedExactInputSingleTx = joinAndSignTx({litActionRes: executeRes, key: 'exactInputSingleTx'});
-    //
-    //   let signedApproveTxRes;
-    //   let signedExactInputSingleTxRes;
-    //   try {
-    //     console.log('Sending signedApproveTx');
-    //     signedApproveTxRes = await provider.sendTransaction(signedApproveTx);
-    //     await signedApproveTxRes.wait();
-    //     signedExactInputSingleTxRes = await provider.sendTransaction(signedExactInputSingleTx);
-    //     await signedExactInputSingleTxRes.wait();
-    //     setOutput(prettifyText(signedExactInputSingleTxRes));
-    //   } catch (err) {
-    //     setOutput('Error sending transactions' + prettifyText(err));
-    //   }
-    // }
     setLoading(false);
 
   }

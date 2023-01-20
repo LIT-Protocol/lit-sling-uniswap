@@ -11,12 +11,11 @@ import { APP_CONFIG, SupportedNetworks } from '../app_config';
  * @param { SupportedNetworks } network
  * @return { Signer }
  */
-// @ts-ignore
+
 export const getSigner = async (network) => {
 
   console.log("[getSigner] network", network);
 
-  // @ts-ignore
   let signer;
 
   const randomPrivateKey = ethers.Wallet.createRandom().privateKey;
@@ -27,9 +26,6 @@ export const getSigner = async (network) => {
 
 
   return signer;
-
-  // -- (otherwise)
-  throw new Error(`No signer is found in network "${network}".`);
 
 }
 
@@ -117,10 +113,8 @@ export const getABI = async ({network, contractAddress}) => {
  */
 export const getContract = async (props) => {
 
-  // @ts-ignore
   let signer = props?.signer ?? await getSigner(props.network);
 
-  // @ts-ignore
   let ABI;
 
   const _contractAddress = props.contractAddress ?? '';
@@ -151,7 +145,6 @@ export const getContract = async (props) => {
     } else {
       const data = sessionStorage.getItem(_contractAddress);
       const parsed = JSON.parse(data ?? '');
-      // @ts-ignore
       ABI = parsed;
     }
   }
