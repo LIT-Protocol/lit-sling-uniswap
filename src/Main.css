@@ -1,8 +1,13 @@
 .center {
+    width: 90vw;
+    margin: 2em auto;
+}
+
+.absolute-center {
     position: absolute;
     top: 50%;
     right: 50%;
-    transform: translate(50%, -50%)
+    transform: translate(50%, -50%);
 }
 
 .fade-in {

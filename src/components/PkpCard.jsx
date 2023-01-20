@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
-import truncateAddress from "../functions/truncateAddress";
+import truncateAddress from "../helpers/truncateAddress";
 import { colorArray } from "../assets/colorArray";
 
 function PkpCard({pkp, setSelectedPkp, i}) {

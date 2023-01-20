@@ -1,5 +1,8 @@
 export function getSwapCode() {
 
+  // this is the original full swap code, with all helpers included.  does not work since providers cannot connect
+  // inside of lit actions
+
   // list of necessary variables for use with litAction
   // swapRouterAddress: SWAP_ROUTER_ADDRESS, - uniswapV3 swap router address
   // tokenIn: tokenIn, - token object including {chainId, address, decimals, symbol, name}

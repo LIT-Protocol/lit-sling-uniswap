@@ -3,6 +3,8 @@ import { Card, CardContent, CircularProgress, Stack, Typography } from "@mui/mat
 import { LoadingButton } from "@mui/lab";
 import LitJsSdk from "lit-js-sdk";
 import './ExecuteAction.css';
+import { ethers } from "ethers";
+import { joinAndSignTx } from "../../helpers/joinAndSignTx";
 
 function ExecuteAction() {
   const [ jsParams, setJsParams ] = useState('{}');
@@ -10,8 +12,11 @@ function ExecuteAction() {
   const [ output, setOutput ] = useState('');
   const [ authSig, setAuthSig ] = useState(null);
   const [ loading, setLoading ] = useState(true);
+  const [ provider, setProvider ] = useState(null);
 
   useEffect(() => {
+    const polygonProvider = new ethers.providers.InfuraProvider('matic', '3a16fe149ab14c7995cdab5f2c1d616c');
+    setProvider(polygonProvider);
     const authSigHolder = localStorage.getItem('lit-auth-signature');
     if (authSigHolder) {
       console.log('Auth sig found in local storage');
@@ -34,6 +39,7 @@ function ExecuteAction() {
   }
 
   const executeAction = async () => {
+    setLoading(true);
     setOutput('');
     let litNodeClient;
     try {
@@ -58,22 +64,52 @@ function ExecuteAction() {
         authSig,
         jsParams: JSON.parse(jsParams),
       });
+      console.log('executeRes', executeRes);
     } catch (err) {
       console.log('Unable to execute code', err);
       setOutput('Unable to execute code' + prettifyText(err));
+      setLoading(false);
       return;
     }
 
-    console.log('executeRes', executeRes);
-    setOutput(prettifyText(executeRes.logs));
-  }
+    // const {approveTx, exactInputSingleTx} = executeRes.response;
+    // const {signatures} = executeRes;
 
-  if (loading === true) {
-    return (
-      <div className="App">
-        <CircularProgress sx={{position: 'absolute', top: '48%', right: '50%', transform: 'translate(50%,-50%)'}}/>
-      </div>
-    )
+    // will only fire if both approve and swap transactions are sent back
+    // if (executeRes.response && Object.keys(executeRes.response).length > 0) {
+    //   // const encodedApproveSignature = ethers.utils.joinSignature({
+    //   //   r: "0x" + signatures['approveTx'].r,
+    //   //   s: "0x" + signatures['approveTx'].s,
+    //   //   recoveryParam: signatures['approveTx'].recid
+    //   // });
+    //   //
+    //   // const encodedExactInputSingleSignature = ethers.utils.joinSignature({
+    //   //   r: "0x" + signatures['exactInputSingleTx'].r,
+    //   //   s: "0x" + signatures['exactInputSingleTx'].s,
+    //   //   recoveryParam: signatures['exactInputSingleTx'].recid
+    //   // });
+    //   //
+    //   // setOutput(prettifyText(signatures.logs));
+    //   // const signedApproveTx = ethers.utils.serializeTransaction(approveTx, encodedApproveSignature);
+    //   // const signedExactInputSingleTx = ethers.utils.serializeTransaction(exactInputSingleTx, encodedExactInputSingleSignature);
+    //   const signedApproveTx = joinAndSignTx({litActionRes: executeRes, key: 'approveTx'});
+    //   const signedExactInputSingleTx = joinAndSignTx({litActionRes: executeRes, key: 'exactInputSingleTx'});
+    //
+    //   let signedApproveTxRes;
+    //   let signedExactInputSingleTxRes;
+    //   try {
+    //     console.log('Sending signedApproveTx');
+    //     signedApproveTxRes = await provider.sendTransaction(signedApproveTx);
+    //     await signedApproveTxRes.wait();
+    //     signedExactInputSingleTxRes = await provider.sendTransaction(signedExactInputSingleTx);
+    //     await signedExactInputSingleTxRes.wait();
+    //     setOutput(prettifyText(signedExactInputSingleTxRes));
+    //   } catch (err) {
+    //     setOutput('Error sending transactions' + prettifyText(err));
+    //   }
+    // }
+    setLoading(false);
+
   }
 
   return (
@@ -83,7 +119,7 @@ function ExecuteAction() {
           <Stack spacing={2}>
             <span className={'execute-action-header'}>
               <Typography variant={'body1'}>Execute Action</Typography>
-              <LoadingButton disabled={!code} color={'secondary'} variant={'outlined'}
+              <LoadingButton disabled={!code} loading={loading} color={'secondary'} variant={'outlined'}
                              onClick={() => executeAction()}>Execute</LoadingButton>
             </span>
             <Stack spacing={2} direction={'row'}>

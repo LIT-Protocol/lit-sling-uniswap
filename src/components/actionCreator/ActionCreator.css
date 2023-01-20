@@ -1,5 +1,5 @@
 .action-creator-form {
-    height: 90vh;
+    min-height: 90vh;
     overflow-y: scroll !important;
     min-width: 450px;
 }
@@ -31,11 +31,26 @@
 
 .action-creator-textarea {
     min-width: 700px;
+    height: 60%;
     border: 1px solid #fff;
     background-color: #282c34;
     color: #fff;
     padding: 1em;
     border-radius: 4px;
-    height: 60%;
+    overflow-y: scroll;
+}
+
+.action-creator-output-container {
+    width: 100%;
+}
+
+.action-creator-output {
+    width: calc(100% - 2em);
+    min-height: 200px;
+    border: 1px solid #fff;
+    background-color: #282c34;
+    color: #fff;
+    padding: 1em;
+    border-radius: 4px;
     overflow-y: scroll;
 }

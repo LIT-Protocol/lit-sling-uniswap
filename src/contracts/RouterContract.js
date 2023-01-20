@@ -48,7 +48,7 @@ export class RouterContract {
 }
 
 /**
- * (READ CLASS) All read functions on smart contract
+ * (READ CLASS) All read helpers on smart contract
  */
 export class ReadRouterContract {
 

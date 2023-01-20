@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './Main.css';
-import ActionCreator from "./components/ActionCreator";
+import ActionCreator from "./components/actionCreator/ActionCreator";
 import { ethers } from "ethers";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import PkpDisplay from "./components/PkpDisplay";
-import { loadUserPkps } from "./functions/loadUserPkps";
-import { createPkpWallet } from "./functions/createPkpWallet";
+import { loadUserPkps } from "./helpers/loadUserPkps";
+import { createPkpWallet } from "./helpers/createPkpWallet";
 
 function Main() {
   const [ provider, setProvider ] = useState(null);
@@ -118,13 +118,13 @@ function Main() {
       )
     } else {
       return (
-        <div className={'center'}>No PKPs found. Make one before using this demo</div>
+        <div className={'absolute-center'}>No PKPs found. Make one before using this demo</div>
       )
     }
   }
 
   return (
-    <div className={'center'}>
+    <div className={'absolute-center'}>
       <Button className={'fade-in'} sx={{m: 2}} variant={'outlined'} onClick={() => getPkps()}>Get User Pkps</Button>
     </div>
   );

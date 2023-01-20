@@ -1,5 +1,9 @@
 export function refactoredSwapCode() {
 
+  // stripped down refactored swap code without signature combination at the end/
+  // does not work as the gasPrice property hits a hexlify error if not directed as a string, but
+  // the string does not work outside of the action
+
   // list of necessary variables for use with litAction
   // swapRouterAddress: SWAP_ROUTER_ADDRESS, - uniswapV3 swap router address
   // tokenIn: tokenIn, - token object including {chainId, address, decimals, symbol, name}
@@ -16,59 +20,38 @@ export function refactoredSwapCode() {
 
   return `
     async function makeSwapData() {
+      console.log('gasPrice', gasPrice)
       const approveTx = {
           to: tokenIn.address,
           nonce: nonceCount,
           value: 0,
-          nonce: nonceCount,
           gasPrice: gasPrice,
           gasLimit: 150000,
           chainId: chainId,
           data: approveCalldata
       }
-      
-      console.log('approveTx', approveTx)
-      // const serialized = ethers.utils.serializeTransaction(approveTx);
-      // console.log('serialized', serialized)
+      const approveMessage = ethers.utils.arrayify(getMessage(approveTx));
 
-      // const approveMessage = ethers.utils.arrayify(getMessage(approveTx));
-      // console.log('approveMessage', approveMessage)
+      const exactInputSingleTx = {
+          to: swapRouterAddress,
+          value: 0,
+          nonce: nonceCount + 1,
+          gasPrice: gasPrice,
+          gasLimit: 500000,
+          chainId: chainId,
+          data: exactInputSingleCalldata
+      }
+      const exactInputSingleMessage = ethers.utils.arrayify(getMessage(exactInputSingleTx));
 
-      // const exactInputSingleTx = {
-      //     to: swapRouterAddress,
-      //     nonce: nonceCount,
-      //     value: 0,
-      //     nonce: nonceCount + 1,
-      //     gasPrice: gasPrice,
-      //     gasLimit: 500000,
-      //     chainId: chainId,
-      //     data: exactInputSingleCalldata
-      // }
-      //
-      // const exactInputSingleMessage = ethers.utils.arrayify(getMessage(exactInputSingleTx));
-      // console.log('exactInputSingleMessage', exactInputSingleMessage) 
+      const allowSig = await LitActions.signEcdsa({ toSign: approveMessage, publicKey: pkp.publicKey, sigName: 'approveTx' });
+      const exactInputSingleSig = await LitActions.signEcdsa({toSign: exactInputSingleMessage, publicKey: pkp.publicKey, sigName: 'exactInputSingleTx'});
 
-      // const allowSig = await LitActions.signEcsda({message: approveMessage, publicKey: pkp.publicKey, sigName: 'approveTx'});
-      // const exactInputSingleSig = await LitActions.signEcsda({message: exactInputSingleMessage, publicKey: pkp.publicKey, sigName: 'exactInputSingleTx'});
-      //
-      // const encodedAllowSignature = ethers.utils.joinSignature({
-      //   r: "0x" + allowSig.r,
-      //   s: "0x" + allowSig.s,
-      //   recoveryParam: allowSig.recid
-      // });
-      //
-      // const encodedExactInputSingleSignature = ethers.utils.joinSignature({
-      //   r: "0x" + exactInputSingleSig.r,
-      //   s: "0x" + exactInputSingleSig.s,
-      //   recoveryParam: exactInputSingleSig.recid
-      // });
-      //
-      // const signedAllowTx = ethers.utils.serializeTransaction(approveTx, encodedAllowSignature);
-      // const signedExactInputSingleTx = ethers.utils.serializeTransaction(exactInputSingleTx, encodedExactInputSingleSignature);
-      //
-      // return {
-      //   signedAllowTx, signedExactInputSingleTx
-      // }
+      const stringifiedResponse = JSON.stringify({
+        approveTx,
+        exactInputSingleTx,
+      });
+
+      LitActions.setResponse({ response: stringifiedResponse });
     }
     
     function getMessage(transaction) {
