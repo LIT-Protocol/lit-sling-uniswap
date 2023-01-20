@@ -66,6 +66,7 @@ function Main() {
     setLoading(false);
   }
 
+  // displays error
   if (errorObject) {
     return (
       <div className="center">
@@ -74,6 +75,8 @@ function Main() {
     )
   }
 
+
+  // loading icon
   if (loading === true) {
     return (
       <div className="App">
@@ -82,6 +85,7 @@ function Main() {
     )
   }
 
+  // the lit action playground
   if (!!pkpWallet) {
     return (
       <div className="App">
@@ -93,6 +97,7 @@ function Main() {
     )
   }
 
+  // pkp selection screen
   if (!!userPkps) {
     if (userPkps.length) {
       return (
@@ -105,6 +110,7 @@ function Main() {
     }
   }
 
+  // connects users wallet
   return (
     <div className={'absolute-center'}>
       <Button className={'fade-in'} sx={{m: 2}} variant={'outlined'} onClick={() => getPkps()}>Get User Pkps</Button>
