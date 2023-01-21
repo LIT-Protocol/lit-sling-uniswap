@@ -29,41 +29,41 @@ function Main() {
 
   // get provider
   const getProvider = () => {
-    // const polygonProvider = new ethers.providers.JsonRpcProvider('https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c');
-    // setProvider(polygonProvider);
-    // setLoading(false);
+    const polygonProvider = new ethers.providers.JsonRpcProvider('https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c');
+    setProvider(polygonProvider);
+    setLoading(false);
   }
 
   // get list of user pkps
   const getPkps = async () => {
-    // setUserPkps([]);
-    // setSelectedPkp(null)
-    // setLoading(true)
-    // try {
-    //   const loadPkpRes = await loadUserPkps();
-    //   setUserPkps(loadPkpRes.tokenObjs);
-    //   setAuthSig(loadPkpRes.authSig);
-    // } catch (err) {
-    //   console.log('err', err);
-    // }
-    // setLoading(false);
+    setUserPkps([]);
+    setSelectedPkp(null)
+    setLoading(true)
+    try {
+      const loadPkpRes = await loadUserPkps();
+      setUserPkps(loadPkpRes.tokenObjs);
+      setAuthSig(loadPkpRes.authSig);
+    } catch (err) {
+      console.log('err', err);
+    }
+    setLoading(false);
   }
 
   // make pkp signer once user selectes a pkp
   const makePkpWallet = async (pkpData) => {
-    // setLoading(true);
-    // setSelectedPkp(pkpData);
-    // let pkpWalletRes;
-    // try {
-    //   pkpWalletRes = await createPkpWallet(pkpData, "https://polygon-mainnet.g.alchemy.com/v2/FE1hoZCnj1juphC10dRbTiz3xjapaZho");
-    //   setPkpWallet(pkpWalletRes);
-    // } catch (err) {
-    //   console.log('Error creating PKP wallet', err);
-    //   setErrorObject({
-    //     message: 'Error creating PKP wallet'
-    //   })
-    // }
-    // setLoading(false);
+    setLoading(true);
+    setSelectedPkp(pkpData);
+    let pkpWalletRes;
+    try {
+      pkpWalletRes = await createPkpWallet(pkpData, "https://polygon-mainnet.g.alchemy.com/v2/FE1hoZCnj1juphC10dRbTiz3xjapaZho");
+      setPkpWallet(pkpWalletRes);
+    } catch (err) {
+      console.log('Error creating PKP wallet', err);
+      setErrorObject({
+        message: 'Error creating PKP wallet'
+      })
+    }
+    setLoading(false);
   }
 
   // displays error

@@ -18,7 +18,7 @@ const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
 
 function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   const [ loading, setLoading ] = useState(false);
-  const [ amountToSell, setAmountToSell ] = useState('');
+  const [ amountToSell, setAmountToSell ] = useState('1');
   const [ textArea, setTextArea ] = useState('');
   const [ litActionText, setLitActionText ] = useState('');
   const [ litJsParamsText, setLitJsParamsText ] = useState('');
@@ -94,23 +94,21 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     const nonceCount = await provider.getTransactionCount(pkp.address);
     console.log('gasPrice.toString()', gasPrice._hex);
 
-    const tradeConfig = {
+    const jsParamsHolder = {
       swapRouterAddress: SWAP_ROUTER_ADDRESS,
       tokenIn: tokenIn,
-      authSig: authSig,
-      providerUrl: providerUrl,
       pkp: pkp,
       chainId,
       gasPrice: gasPrice._hex,
+      nonceCount,
       approveCalldata,
       exactInputSingleCalldata,
-      nonceCount
     }
 
-    setJsParams(tradeConfig);
+    setJsParams(jsParamsHolder);
     const litSellCode = refactoredSwapCode();
     // console.log('litSellCode', litSellCode);
-    setLitJsParamsText(prettifyText(tradeConfig));
+    setLitJsParamsText(prettifyText(jsParamsHolder));
     setLitActionText(litSellCode);
   }
 
@@ -133,14 +131,14 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       return;
     }
 
-    let executeRes;
+    let litActionRes;
     try {
-      executeRes = await litNodeClient.executeJs({
+      litActionRes = await litNodeClient.executeJs({
         code: refactoredSwapCode(),
         authSig,
         jsParams: jsParams,
       });
-      console.log('executeRes', executeRes);
+      console.log('litActionRes', litActionRes);
     } catch (err) {
       console.log('Unable to execute code', err);
       setOutput('Unable to execute code' + prettifyText(err));
@@ -148,13 +146,15 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       return;
     }
 
-    // will only fire if both approve and swap transactions are sent back
-    if (executeRes.response && Object.keys(executeRes.response).length > 0) {
-      const signedApproveTx = joinAndSignTx({litActionRes: executeRes, key: 'approveTx'});
-      const signedExactInputSingleTx = joinAndSignTx({litActionRes: executeRes, key: 'exactInputSingleTx'});
+    // will only fire if two transactions are returned
+    if (litActionRes.response && Object.keys(litActionRes.response).length === 2) {
+      const signedApproveTx = joinAndSignTx({litActionRes: litActionRes, key: 'approveTx'});
+      const signedExactInputSingleTx = joinAndSignTx({litActionRes: litActionRes, key: 'exactInputSingleTx'});
 
       let signedApproveTxRes;
       let signedExactInputSingleTxRes;
+
+      // send the transactions
       try {
         console.log('Sending signedApproveTx');
         signedApproveTxRes = await provider.sendTransaction(signedApproveTx);
@@ -180,13 +180,16 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
             <CardContent className={'action-creator-input'}>
               <Stack spacing={2}>
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
-                <div>
+                <Stack spacing={1}>
                   <Typography variant={'body'}>Token In - {tokenInAmount} {tokenIn.symbol}</Typography>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenIn)}
                             onChange={(e) => setTokenIn(e.target.value)}/>
                   <TextField className={'action-creator-textfield'} label={'Amount To Sell'} variant={'outlined'}
                              onChange={(e) => setAmountToSell(e.target.value)} value={amountToSell}/>
-                </div>
+                  <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
+                                 variant={'outlined'}>Create
+                    Action</LoadingButton>
+                </Stack>
                 <div>
                   <Typography variant={'body'}>Token Out - {tokenOutAmount} {tokenOut.symbol}</Typography>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenOut)}
@@ -195,12 +198,11 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
               </Stack>
             </CardContent>
             <CardActions sx={{justifyContent: 'space-between'}}>
-              <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
-                             variant={'outlined'}>Create
-                Action</LoadingButton>
-              <LoadingButton disabled={!litActionText} onClick={executeAction} loading={loading} color={'secondary'}
-                             variant={'outlined'}>Run
-                Action</LoadingButton>
+              <Stack sx={{width: '100%'}}>
+                <LoadingButton disabled={!litActionText} onClick={executeAction} loading={loading} color={'secondary'}
+                               variant={'outlined'}>Run
+                  Action</LoadingButton>
+              </Stack>
             </CardActions>
           </Card>
           <Stack spacing={2} direction={'column'} sx={{width: '100%'}}>
