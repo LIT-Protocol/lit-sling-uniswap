@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './Main.css';
-import { loadUserPkps } from "./helpers/loadUserPkps";
 
 function Main() {
   const [ provider, setProvider ] = useState(null);
@@ -35,9 +34,9 @@ function Main() {
     setSelectedPkp(null)
     setLoading(true)
     try {
-      const loadPkpRes = await loadUserPkps();
-      setUserPkps(loadPkpRes.tokenObjs);
-      setAuthSig(loadPkpRes.authSig);
+      // const loadPkpRes = await loadUserPkps();
+      // setUserPkps(loadPkpRes.tokenObjs);
+      // setAuthSig(loadPkpRes.authSig);
     } catch (err) {
       console.log('err', err);
     }
