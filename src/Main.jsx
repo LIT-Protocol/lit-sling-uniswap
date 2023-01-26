@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Main.css';
+import { loadUserPkps } from "./helpers/loadUserPkps";
 
 function Main() {
   const [ provider, setProvider ] = useState(null);
@@ -27,22 +28,22 @@ function Main() {
   //   setProvider(polygonProvider);
   //   setLoading(false);
   // }
-  //
-  // // get list of user pkps
-  // const getPkps = async () => {
-  //   setUserPkps([]);
-  //   setSelectedPkp(null)
-  //   setLoading(true)
-  //   try {
-  //     const loadPkpRes = await loadUserPkps();
-  //     setUserPkps(loadPkpRes.tokenObjs);
-  //     setAuthSig(loadPkpRes.authSig);
-  //   } catch (err) {
-  //     console.log('err', err);
-  //   }
-  //   setLoading(false);
-  // }
-  //
+
+  // get list of user pkps
+  const getPkps = async () => {
+    setUserPkps([]);
+    setSelectedPkp(null)
+    setLoading(true)
+    try {
+      const loadPkpRes = await loadUserPkps();
+      setUserPkps(loadPkpRes.tokenObjs);
+      setAuthSig(loadPkpRes.authSig);
+    } catch (err) {
+      console.log('err', err);
+    }
+    setLoading(false);
+  }
+
   // // make pkp signer once user selectes a pkp
   // const makePkpWallet = async (pkpData) => {
   //   setLoading(true);
@@ -107,8 +108,7 @@ function Main() {
   // connects users wallet
   return (
     <div className={'absolute-center'}>
-      OYOYOYOYOYOY
-      {/*<Button className={'fade-in'} sx={{m: 2}} variant={'outlined'} onClick={() => getPkps()}>Get User Pkps</Button>*/}
+      <Button className={'fade-in'} sx={{m: 2}} variant={'outlined'} onClick={() => getPkps()}>Get User Pkps</Button>
     </div>
   );
 }
