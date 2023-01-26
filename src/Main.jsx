@@ -39,6 +39,7 @@ function Main() {
       const loadPkpRes = await loadUserPkps();
       setUserPkps(loadPkpRes.tokenObjs);
       setAuthSig(loadPkpRes.authSig);
+      console.log('check loadPkpRes', loadPkpRes);
     } catch (err) {
       console.log('err', err);
     }
