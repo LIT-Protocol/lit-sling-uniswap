@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import './Main.css';
-import { Button } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { loadUserPkps } from "./helpers/loadUserPkps";
+import { ethers } from "ethers";
+import { createPkpWallet } from "./helpers/createPkpWallet";
+import ActionCreator from "./components/actionCreator/ActionCreator";
+import PkpDisplay from "./components/PkpDisplay";
+import './Main.css';
 
 function Main() {
   const [ provider, setProvider ] = useState(null);
