@@ -1,15 +1,13 @@
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 
-import { APP_CONFIG, SupportedNetworks } from "../app_config";
+import { APP_CONFIG } from "../app_config";
 import { getContract } from "./getContract";
-import { decimalTohex, hexToDecimal, MultiETHFormat, wei2eth } from "./converter";
+import { hexToDecimal, wei2eth } from "./converter";
 
 /**
  * (CLASS) Entry point of accessing the smart contract functionalities
  */
 export class PKPContract {
-
-
   contract;
 
   read;

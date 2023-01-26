@@ -1,5 +1,5 @@
 // import { Contract, ContractInterface, ethers, Signer, Wallet } from "ethers";
-import { ethers, Contract, Signer, ContractInterface } from "ethers";
+import { Contract, ethers, Signer } from "ethers";
 import { APP_CONFIG, SupportedNetworks } from '../app_config';
 
 

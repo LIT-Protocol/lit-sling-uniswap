@@ -1,8 +1,6 @@
 // @ts-ignore
 import converter from 'hex2dec';
-import { BigNumber } from "ethers";
 import { ethers } from "ethers";
-
 // import { BigNumber, ethers } from "ethers";
 // -- (helper) milliseconds converter
 export const milliC = (milliseconds) => {

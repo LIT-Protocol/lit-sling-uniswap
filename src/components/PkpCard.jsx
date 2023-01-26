@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
+import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import truncateAddress from "../helpers/truncateAddress";
 import { colorArray } from "../assets/colorArray";
 

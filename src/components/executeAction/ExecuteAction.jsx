@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CircularProgress, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import LitJsSdk from "lit-js-sdk";
 import './ExecuteAction.css';
-import { ethers } from "ethers";
-import { joinAndSignTx } from "../../helpers/joinAndSignTx";
 
 function ExecuteAction() {
   const [ jsParams, setJsParams ] = useState('{}');
@@ -12,11 +10,11 @@ function ExecuteAction() {
   const [ output, setOutput ] = useState('');
   const [ authSig, setAuthSig ] = useState(null);
   const [ loading, setLoading ] = useState(true);
-  const [ provider, setProvider ] = useState(null);
+  // const [ provider, setProvider ] = useState(null);
 
   useEffect(() => {
-    const polygonProvider = new ethers.providers.InfuraProvider('matic', '3a16fe149ab14c7995cdab5f2c1d616c');
-    setProvider(polygonProvider);
+    // const polygonProvider = new ethers.providers.InfuraProvider('matic', '3a16fe149ab14c7995cdab5f2c1d616c');
+    // setProvider(polygonProvider);
     const authSigHolder = localStorage.getItem('lit-auth-signature');
     if (authSigHolder) {
       console.log('Auth sig found in local storage');

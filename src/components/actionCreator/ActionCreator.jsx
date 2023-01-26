@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
-import { Button, Card, CardActions, CardContent, CardHeader, Stack, TextField, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, Stack, TextField, Typography } from "@mui/material";
 import './ActionCreator.css';
 import truncateAddress from "../../helpers/truncateAddress";
 import { LoadingButton } from "@mui/lab";
-import executableSwapCode from "../../litSellFactory/executableSwapCode";
 import { ethers } from "ethers";
 import { generateSwapExactInputSingleCalldata } from "../../helpers/swapExactInputSingle";
 import { generateApproveCalldata } from "../../helpers/approve";
 import ERC20ABI from "../../ABIs/erc20Abi.json";
-import { getSwapCode } from "../../litSellFactory/getSwapCode";
 import { refactoredSwapCode } from "../../litSellFactory/refactoredSwapCode";
 import { joinAndSignTx } from "../../helpers/joinAndSignTx";
 import LitJsSdk from "lit-js-sdk";
 
-const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
+// const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
 
 function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   const [ loading, setLoading ] = useState(false);
   const [ amountToSell, setAmountToSell ] = useState('1');
-  const [ textArea, setTextArea ] = useState('');
   const [ litActionText, setLitActionText ] = useState('');
   const [ litJsParamsText, setLitJsParamsText ] = useState('');
   const [ tokenInAmount, setTokenInAmount ] = useState('');
@@ -42,13 +39,6 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     symbol: 'USDC',
     name: 'USD//C'
   })
-
-  useEffect(() => {
-    if (litActionText) {
-      const prettify = prettifyText(litActionText);
-      setTextArea(prettify);
-    }
-  }, [ litActionText ])
 
   useEffect(() => {
     getCurrencyAmounts(pkp.address);
