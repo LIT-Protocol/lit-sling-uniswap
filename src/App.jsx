@@ -7,7 +7,6 @@ import Main from "./Main";
 function App() {
   return (
     <div>
-      AYAYAYAYAYAYAYAY
       <Routes>
         <Route path={'/'} element={<Main/>}/>
         {/*<Route path={"action"} element={<ExecuteAction/>}/>*/}
