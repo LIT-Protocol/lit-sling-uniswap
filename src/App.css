@@ -1,0 +1,26 @@
+.nav-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: #fff;
+    padding: 0.5em 1.5em;
+    /*background-color: #fff;*/
+    background-color: transparent;
+    border-bottom: 1px solid #282c34
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 3em;
+    /*margin-right: 1em;*/
+    /*margin-left: 1em;*/
+}
+
+.nav-link {
+    margin-right: 1em;
+    margin-left: 1em;
+}
