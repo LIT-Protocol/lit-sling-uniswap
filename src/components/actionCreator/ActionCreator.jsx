@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardActions, CardContent, CardHeader, Stack, TextField, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, Stack, TextField, Typography } from "@mui/material";
 import './ActionCreator.css';
 import truncateAddress from "../../helpers/truncateAddress";
 import { LoadingButton } from "@mui/lab";
@@ -8,8 +8,9 @@ import { generateSwapExactInputSingleCalldata } from "../../helpers/swapExactInp
 import { generateApproveCalldata } from "../../helpers/approve";
 import ERC20ABI from "../../ABIs/erc20Abi.json";
 import { refactoredSwapCode } from "../../litSellFactory/refactoredSwapCode";
-import { joinAndSignTx } from "../../helpers/joinAndSignTx";
+import LitTokenSelect from "../litTokenSelect/LitTokenSelect";
 import LitJsSdk from "lit-js-sdk";
+import { joinAndSignTx } from "../../helpers/joinAndSignTx";
 
 // const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
@@ -41,14 +42,22 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   })
 
   useEffect(() => {
-    getCurrencyAmounts(pkp.address);
-  }, [])
+    console.log('FIRE!')
+    setTokenInAmount('--');
+    getCurrencyAmounts(pkp.address, 'tokenIn');
+  }, [ tokenIn ])
+
+  useEffect(() => {
+    console.log('FIRE!')
+    setTokenOutAmount('--');
+    getCurrencyAmounts(pkp.address, 'tokenOut');
+  }, [ tokenOut ])
 
   const prettifyText = (text) => {
     return JSON.stringify(text, undefined, 4);
   }
 
-  const getCurrencyAmounts = async (address) => {
+  const getCurrencyAmounts = async (address, tokenType = null) => {
     setLoading(true);
     try {
       const contract0 = new ethers.Contract(tokenIn.address, ERC20ABI, provider);
@@ -61,6 +70,11 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       setTokenOutAmount(tokenOutReadable);
     } catch (err) {
       console.log('error getting token amounts', err);
+      if (tokenType === 'tokenIn') {
+        setTokenInAmount('error getting token');
+      } else if (tokenType === 'tokenOut') {
+        setTokenOutAmount('error getting token');
+      }
     }
     setLoading(false);
   }
@@ -105,6 +119,18 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   const executeAction = async () => {
     setLoading(true);
     setOutput('');
+
+    // all in one execution
+    // await executeSwap({
+    //   tokenIn,
+    //   tokenOut,
+    //   pkp,
+    //   provider,
+    //   amountToSell,
+    //   authSig
+    // })
+
+    // original execution.  1/2 lit action 1/2 regular
     let litNodeClient;
     try {
       litNodeClient = new LitJsSdk.LitNodeClient({litNetwork: "serrano", debug: false});
@@ -166,25 +192,31 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       <Stack spacing={2}>
         <Stack spacing={2} direction={'row'}>
           <Card className={'action-creator-form'}>
-            <CardHeader title={`PKP: ${truncateAddress(pkp.address)}`}/>
+            {/*<CardHeader title={`PKP: ${truncateAddress(pkp.address)}`}/>*/}
             <CardContent className={'action-creator-input'}>
               <Stack spacing={2}>
+                <Typography variant={'h5'}>{`PKP: ${truncateAddress(pkp.address)}`}</Typography>
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
+                <Typography color={'error'}> Polygon only. Execute swaps at your own risk.</Typography>
                 <Stack spacing={1}>
-                  <Typography variant={'body'}>Token In - {tokenInAmount} {tokenIn.symbol}</Typography>
+                  <Typography
+                    variant={'body'}>{tokenIn && tokenInAmount ? `Token In - ${tokenInAmount} ${tokenIn.symbol}` : 'No token selected'}</Typography>
+                  <LitTokenSelect setSelectedToken={setTokenIn}/>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenIn)}
                             onChange={(e) => setTokenIn(e.target.value)}/>
                   <TextField className={'action-creator-textfield'} label={'Amount To Sell'} variant={'outlined'}
                              onChange={(e) => setAmountToSell(e.target.value)} value={amountToSell}/>
-                  <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
-                                 variant={'outlined'}>Create
-                    Action</LoadingButton>
                 </Stack>
                 <div>
-                  <Typography variant={'body'}>Token Out - {tokenOutAmount} {tokenOut.symbol}</Typography>
+                  <Typography
+                    variant={'body'}>{tokenOut && tokenOutAmount ? `Token Out - ${tokenOutAmount} ${tokenOut.symbol}` : 'No token selected'}</Typography>
+                  <LitTokenSelect setSelectedToken={setTokenOut}/>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenOut)}
                             onChange={(e) => setTokenOut(e.target.value)}/>
                 </div>
+                <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
+                               variant={'outlined'}>Create
+                  Action</LoadingButton>
               </Stack>
             </CardContent>
             <CardActions sx={{justifyContent: 'space-between'}}>

@@ -9,18 +9,8 @@
     border-bottom: 1px solid #282c34
 }
 
-.nav-left {
-    display: flex;
-    align-items: center;
-}
-
 .nav-logo {
     height: 3em;
     /*margin-right: 1em;*/
     /*margin-left: 1em;*/
-}
-
-.nav-link {
-    margin-right: 1em;
-    margin-left: 1em;
 }
