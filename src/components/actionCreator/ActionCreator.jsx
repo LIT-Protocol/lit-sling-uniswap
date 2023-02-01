@@ -175,9 +175,12 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
         console.log('Sending signedApproveTx');
         signedApproveTxRes = await provider.sendTransaction(signedApproveTx);
         await signedApproveTxRes.wait();
+        console.log('signedApproveTxRes', signedApproveTxRes);
+        console.log('Sending signedExactInputSingleTx');
         signedExactInputSingleTxRes = await provider.sendTransaction(signedExactInputSingleTx);
         await signedExactInputSingleTxRes.wait();
         setOutput(prettifyText(signedExactInputSingleTxRes));
+        console.log('signedExactInputSingleTxRes', signedExactInputSingleTxRes);
       } catch (err) {
         setOutput('Error sending transactions' + prettifyText(err));
       }
