@@ -10,7 +10,7 @@ const LitTokenSelect = ({label, setSelectedToken, defaultTokens = null, selected
 
   useEffect(() => {
     const filteredTokenList = fullTokenList.tokens.filter(token => {
-      return (token['chainId'] === 137 && !!token['decimals'] && !!token['symbol'] && token['address'])
+      return (token['chainId'] === 137 && !!token['decimals'] && !!token['symbol'] && token['address'] && token['symbol'] !== 'MATIC')
     });
     setTokenList(filteredTokenList);
   }, [])
