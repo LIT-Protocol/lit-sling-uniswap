@@ -16,6 +16,11 @@
     color: #fff;
 }
 
+.action-creator-token-logo {
+    width: 1.5em;
+    height: 1.5em;
+}
+
 .action-creator-input {
     background-color: #0a132d;
 }

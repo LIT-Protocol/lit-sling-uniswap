@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardActions, CardContent, Stack, TextField, Typography } from "@mui/material";
+import { Card, CardContent, Stack, TextField, Typography } from "@mui/material";
 import './ActionCreator.css';
 import { LoadingButton } from "@mui/lab";
 import { ethers } from "ethers";
@@ -31,6 +31,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     decimals: 18,
     address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
     symbol: 'WMATIC',
+    logo: "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912",
     name: 'Wrapped Matic'
   })
   const [ tokenOut, setTokenOut ] = useState({
@@ -38,6 +39,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     decimals: 6,
     address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     symbol: 'USDC',
+    logo: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
     name: 'USD//C'
   })
 
@@ -184,8 +186,22 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       }
     }
     setLoading(false);
-    getCurrencyAmounts(pkp.address);
+    await getCurrencyAmounts(pkp.address);
+    setTimeout(async () => {
+      await getCurrencyAmounts(pkp.address);
+    }, 5000);
+  }
 
+  function buildTokenAmount(type = null, token = null, tokenAmount = null) {
+    return (
+      <Stack spacing={1} direction={'row'} alignItems={'center'}>
+        {!!token.logo && (
+          <img className={'action-creator-token-logo'} src={token.logo}/>
+        )}
+        <Typography
+          variant={'body'}>{token && tokenAmount ? `${type} - ${tokenAmount} ${token.symbol}` : 'No token selected'}</Typography>
+      </Stack>
+    )
   }
 
   return (
@@ -200,8 +216,9 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
                 <Typography color={'error'}> Polygon only. Execute swaps at your own risk.</Typography>
                 <Stack spacing={1}>
-                  <Typography
-                    variant={'body'}>{tokenIn && tokenInAmount ? `Token In - ${tokenInAmount} ${tokenIn.symbol}` : 'No token selected'}</Typography>
+                  {buildTokenAmount('Token In', tokenIn, tokenInAmount)}
+                  {/*<Typography*/}
+                  {/*  variant={'body'}>{tokenIn && tokenInAmount ? `Token In - ${tokenInAmount} ${tokenIn.symbol}` : 'No token selected'}</Typography>*/}
                   <LitTokenSelect setSelectedToken={setTokenIn}/>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenIn)}
                             onChange={(e) => setTokenIn(e.target.value)}/>
@@ -209,8 +226,9 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
                              onChange={(e) => setAmountToSell(e.target.value)} value={amountToSell}/>
                 </Stack>
                 <Stack spacing={1}>
-                  <Typography
-                    variant={'body'}>{tokenOut && tokenOutAmount ? `Token Out - ${tokenOutAmount} ${tokenOut.symbol}` : 'No token selected'}</Typography>
+                  {buildTokenAmount('Token Out', tokenOut, tokenOutAmount)}
+                  {/*<Typography*/}
+                  {/*  variant={'body'}>{tokenOut && tokenOutAmount ? `Token Out - ${tokenOutAmount} ${tokenOut.symbol}` : 'No token selected'}</Typography>*/}
                   <LitTokenSelect setSelectedToken={setTokenOut}/>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenOut)}
                             onChange={(e) => setTokenOut(e.target.value)}/>
@@ -218,15 +236,11 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
                 <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
                                variant={'outlined'}>Create
                   Action</LoadingButton>
-              </Stack>
-            </CardContent>
-            <CardActions sx={{backgroundColor: '#0a132d', justifyContent: 'space-between'}}>
-              <Stack sx={{width: '100%'}}>
                 <LoadingButton disabled={!litActionText} onClick={executeAction} loading={loading} color={'secondary'}
                                variant={'outlined'}>Run
                   Action</LoadingButton>
               </Stack>
-            </CardActions>
+            </CardContent>
           </Card>
           <Stack spacing={2} direction={'column'} sx={{width: '100%'}}>
             <Typography color={'primary'} variant={'body1'}>JS Params Preview</Typography>
