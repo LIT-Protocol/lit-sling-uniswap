@@ -4,7 +4,7 @@ import { loadUserPkps } from "./helpers/loadUserPkps";
 import { ethers } from "ethers";
 import { createPkpWallet } from "./helpers/createPkpWallet";
 import ActionCreator from "./components/actionCreator/ActionCreator";
-import PkpDisplay from "./components/PkpDisplay";
+import PkpDisplay from "./components/pkpDisplay/PkpDisplay";
 import './Main.css';
 
 function Main() {
@@ -43,7 +43,7 @@ function Main() {
       const loadPkpRes = await loadUserPkps();
       setUserPkps(loadPkpRes.tokenObjs);
       setAuthSig(loadPkpRes.authSig);
-      console.log('check loadPkpRes', loadPkpRes);
+      console.log('[Lit Swap Playground] - Main - getPkps', loadPkpRes);
     } catch (err) {
       console.log('err', err);
     }

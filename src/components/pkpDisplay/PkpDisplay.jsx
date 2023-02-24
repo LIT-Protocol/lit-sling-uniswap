@@ -1,10 +1,11 @@
 import PkpCard from "./PkpCard";
 import { Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
-import truncateAddress from "../helpers/truncateAddress";
+import { truncateAddress } from "../../helpers/truncateAddress";
+import './PkpDisplay.css'
 
 function PkpDisplay({pkps, setSelectedPkp, walletAddress}) {
   return (
-    <Card className={'absolute-center fade-in'}>
+    <Card className={'absolute-center fade-in pkp-display-card'}>
       <CardHeader title={`Wallet Address: ${truncateAddress(walletAddress)}`}/>
       <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
         <Stack spacing={2}>

@@ -1,5 +1,6 @@
 .nav-container {
     display: flex;
+    flex-direction: row-reverse;
     justify-content: flex-end;
     align-items: center;
     color: #fff;
@@ -13,4 +14,12 @@
     height: 3em;
     /*margin-right: 1em;*/
     /*margin-left: 1em;*/
+}
+
+.app-container {
+    /*background: var(--brand-primary);*/
+    background: radial-gradient(100% 100% at 50% 0%, #33257f 0%, #432155 60%, transparent 100%), #0d0e0e;
+    min-height: 100vh;
+    /*max-height: 100%;*/
+    /*padding-bottom: 3em;*/
 }

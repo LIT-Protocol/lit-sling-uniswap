@@ -3,16 +3,15 @@ import { components, createFilter, WindowedMenuList, } from "react-windowed-sele
 
 import CreatableSelect from "react-select/creatable";
 import { fullTokenList } from "./tokenList";
+import './LitTokenSelect.css'
 
 const LitTokenSelect = ({label, setSelectedToken, defaultTokens = null, selectedToken, allowEthereum = false}) => {
   const [ tokenList, setTokenList ] = useState([]);
 
   useEffect(() => {
-    console.log('fullTokenList', fullTokenList);
     const filteredTokenList = fullTokenList.tokens.filter(token => {
       return (token['chainId'] === 137 && !!token['decimals'] && !!token['symbol'] && token['address'])
     });
-    console.log('filteredTokenList', filteredTokenList);
     setTokenList(filteredTokenList);
   }, [])
 

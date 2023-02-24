@@ -1,3 +1,7 @@
+.action-creator-container {
+    padding-bottom: 3em;
+}
+
 .action-creator-form {
     min-height: 90vh;
     overflow-y: scroll !important;
@@ -8,9 +12,12 @@
     width: calc(100% - 2em);
     height: 140px;
     padding: 1em;
+    background-color: #0a132d;
+    color: #fff;
 }
 
 .action-creator-input {
+    background-color: #0a132d;
 }
 
 .action-creator-textfield {
@@ -20,8 +27,9 @@
 
 .action-creator-js-params {
     min-width: 700px;
-    border: 1px solid #fff;
-    background-color: #282c34;
+    /*border: 1px solid #fff;*/
+    /*background-color: #282c34;*/
+    background-color: #0a132d;
     color: #fff;
     padding: 1em;
     border-radius: 4px;
@@ -32,8 +40,9 @@
 .action-creator-textarea {
     min-width: 700px;
     height: 60%;
-    border: 1px solid #fff;
-    background-color: #282c34;
+    /*border: 1px solid #fff;*/
+    /*background-color: #282c34;*/
+    background-color: #0a132d;
     color: #fff;
     padding: 1em;
     border-radius: 4px;
@@ -47,8 +56,9 @@
 .action-creator-output {
     width: calc(100% - 2em);
     min-height: 200px;
-    border: 1px solid #fff;
-    background-color: #282c34;
+    /*border: 1px solid #fff;*/
+    /*background-color: #282c34;*/
+    background-color: #0a132d;
     color: #fff;
     padding: 1em;
     border-radius: 4px;

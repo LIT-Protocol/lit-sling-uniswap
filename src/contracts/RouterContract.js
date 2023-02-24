@@ -56,7 +56,7 @@ export class ReadRouterContract {
 
   isRouted = async (tokenId) => {
 
-    console.log("[RouterContracts] isRouted tokenId:", tokenId);
+    console.log("[Lit Swap Playground] - [RouterContracts] isRouted tokenId:", tokenId);
 
     const isRouted = this.contract.isRouted(tokenId);
 

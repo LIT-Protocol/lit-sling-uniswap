@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardActions, CardContent, Stack, TextField, Typography } from "@mui/material";
 import './ActionCreator.css';
-import truncateAddress from "../../helpers/truncateAddress";
 import { LoadingButton } from "@mui/lab";
 import { ethers } from "ethers";
 import { generateSwapExactInputSingleCalldata } from "../../helpers/swapExactInputSingle";
@@ -11,6 +10,7 @@ import { refactoredSwapCode } from "../../litSellFactory/refactoredSwapCode";
 import LitTokenSelect from "../litTokenSelect/LitTokenSelect";
 import LitJsSdk from "lit-js-sdk";
 import { joinAndSignTx } from "../../helpers/joinAndSignTx";
+import { longerTruncateAddress } from "../../helpers/truncateAddress";
 
 // const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
@@ -42,13 +42,13 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   })
 
   useEffect(() => {
-    console.log('FIRE!')
+    console.log('[Lit Swap Playground] - Update tokenIn:', tokenIn);
     setTokenInAmount('--');
     getCurrencyAmounts(pkp.address, 'tokenIn');
   }, [ tokenIn ])
 
   useEffect(() => {
-    console.log('FIRE!')
+    console.log('[Lit Swap Playground] - Update tokenOut:', tokenOut);
     setTokenOutAmount('--');
     getCurrencyAmounts(pkp.address, 'tokenOut');
   }, [ tokenOut ])
@@ -69,7 +69,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       setTokenInAmount(tokenInReadable);
       setTokenOutAmount(tokenOutReadable);
     } catch (err) {
-      console.log('error getting token amounts', err);
+      console.log('[Lit Swap Playground] - Error getting token amounts:', err);
       if (tokenType === 'tokenIn') {
         setTokenInAmount('error getting token');
       } else if (tokenType === 'tokenOut') {
@@ -96,7 +96,6 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     const gasPrice = await provider.getGasPrice();
     const chainId = tokenIn.chainId;
     const nonceCount = await provider.getTransactionCount(pkp.address);
-    console.log('gasPrice.toString()', gasPrice._hex);
 
     const jsParamsHolder = {
       swapRouterAddress: SWAP_ROUTER_ADDRESS,
@@ -111,7 +110,6 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
 
     setJsParams(jsParamsHolder);
     const litSellCode = refactoredSwapCode();
-    // console.log('litSellCode', litSellCode);
     setLitJsParamsText(prettifyText(jsParamsHolder));
     setLitActionText(litSellCode);
   }
@@ -136,13 +134,13 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
       litNodeClient = new LitJsSdk.LitNodeClient({litNetwork: "serrano", debug: false});
       await litNodeClient.connect();
     } catch (err) {
-      console.log('Unable to connect to network', err);
+      console.log('[Lit Swap Playground] - Error connecting to network', err);
       setOutput('Unable to connect to network' + prettifyText(err));
       return;
     }
 
     if (!litNodeClient) {
-      console.log('LitNodeClient was not instantiated');
+      console.log('[Lit Swap Playground] - LitNodeClient was not instantiated');
       setOutput('LitNodeClient was not instantiated');
       return;
     }
@@ -154,9 +152,9 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
         authSig,
         jsParams: jsParams,
       });
-      console.log('litActionRes', litActionRes);
+      console.log('[Lit Swap Playground] - Lit action resolution:', litActionRes);
     } catch (err) {
-      console.log('Unable to execute code', err);
+      console.log('[Lit Swap Playground] - Unable to execute code', err);
       setOutput('Unable to execute code' + prettifyText(err));
       setLoading(false);
       return;
@@ -172,17 +170,17 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
 
       // send the transactions
       try {
-        console.log('Sending signedApproveTx');
+        console.log('[Lit Swap Playground] - Sending signedApproveTx:', signedApproveTx);
         signedApproveTxRes = await provider.sendTransaction(signedApproveTx);
         await signedApproveTxRes.wait();
-        console.log('signedApproveTxRes', signedApproveTxRes);
-        console.log('Sending signedExactInputSingleTx');
+        console.log('[Lit Swap Playground] - signedApproveTxRes:', signedApproveTxRes);
+        console.log('[Lit Swap Playground] - Sending signedExactInputSingleTx');
         signedExactInputSingleTxRes = await provider.sendTransaction(signedExactInputSingleTx);
         await signedExactInputSingleTxRes.wait();
         setOutput(prettifyText(signedExactInputSingleTxRes));
-        console.log('signedExactInputSingleTxRes', signedExactInputSingleTxRes);
+        console.log('[Lit Swap Playground] - signedExactInputSingleTxRes:', signedExactInputSingleTxRes);
       } catch (err) {
-        setOutput('Error sending transactions' + prettifyText(err));
+        setOutput('[Lit Swap Playground] - Error sending transactions' + prettifyText(err));
       }
     }
     setLoading(false);
@@ -191,14 +189,14 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   }
 
   return (
-    <div className={'center fade-in'}>
+    <div className={'center fade-in action-creator-container'}>
       <Stack spacing={2}>
         <Stack spacing={2} direction={'row'}>
           <Card className={'action-creator-form'}>
             {/*<CardHeader title={`PKP: ${truncateAddress(pkp.address)}`}/>*/}
             <CardContent className={'action-creator-input'}>
               <Stack spacing={2}>
-                <Typography variant={'h5'}>{`PKP: ${truncateAddress(pkp.address)}`}</Typography>
+                <Typography variant={'h5'}>{`PKP: ${longerTruncateAddress(pkp.address)}`}</Typography>
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
                 <Typography color={'error'}> Polygon only. Execute swaps at your own risk.</Typography>
                 <Stack spacing={1}>
@@ -210,19 +208,19 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
                   <TextField className={'action-creator-textfield'} label={'Amount To Sell'} variant={'outlined'}
                              onChange={(e) => setAmountToSell(e.target.value)} value={amountToSell}/>
                 </Stack>
-                <div>
+                <Stack spacing={1}>
                   <Typography
                     variant={'body'}>{tokenOut && tokenOutAmount ? `Token Out - ${tokenOutAmount} ${tokenOut.symbol}` : 'No token selected'}</Typography>
                   <LitTokenSelect setSelectedToken={setTokenOut}/>
                   <textarea className={'action-creator-token-info'} value={prettifyText(tokenOut)}
                             onChange={(e) => setTokenOut(e.target.value)}/>
-                </div>
+                </Stack>
                 <LoadingButton disabled={!amountToSell} onClick={createAction} loading={loading} color={'secondary'}
                                variant={'outlined'}>Create
                   Action</LoadingButton>
               </Stack>
             </CardContent>
-            <CardActions sx={{justifyContent: 'space-between'}}>
+            <CardActions sx={{backgroundColor: '#0a132d', justifyContent: 'space-between'}}>
               <Stack sx={{width: '100%'}}>
                 <LoadingButton disabled={!litActionText} onClick={executeAction} loading={loading} color={'secondary'}
                                variant={'outlined'}>Run

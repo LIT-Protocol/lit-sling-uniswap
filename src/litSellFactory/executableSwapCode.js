@@ -38,9 +38,7 @@ export function getSwapCode(
         approveRes = await executeApprove();
         await approveRes.wait();
         const swapRes = await executeUniswapV3SwapExactInputSingle()
-        console.log('swapRes', swapRes)
         const resRes = await swapRes.wait();
-        console.log('resRes', resRes)
         return resRes;
       } catch (err) {
         return err;
@@ -61,7 +59,7 @@ export function getSwapCode(
 
         return await pkpSignAndSendTransaction(tx, "approveTx");
       }).catch(err => {
-        console.log("Error on executeApprove", err);
+        console.log("[Lit Swap Playground] - Error on executeApprove", err);
         return err;
       })
     }
@@ -82,7 +80,7 @@ export function getSwapCode(
 
         return await pkpSignAndSendTransaction(tx, "exactInputSingleTx");
       }).catch((err) => {
-        console.log('Error on executeUniswapV3SwapExactInputSingle()', err)
+        console.log('[Lit Swap Playground] - Error on executeUniswapV3SwapExactInputSingle()', err)
         return err;
       })
     }
@@ -133,9 +131,9 @@ export function getSwapCode(
   }
 
   executeSwap(polygonProvider).then((res) => {
-    console.log('swap complete', res)
+    console.log('[Lit Swap Playground] - Swap complete:', res)
   }).catch((err) => {
-    console.log('swap error', err)
+    console.log('[Lit Swap Playground] - Swap error:', err)
   });
 }
 

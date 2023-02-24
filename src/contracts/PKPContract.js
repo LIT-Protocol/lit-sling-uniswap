@@ -86,7 +86,6 @@ export class ReadPKPContract {
     }
 
     let tokens = [];
-    console.log('GET TOKENS BY ADDRESS', ownerAddress)
 
     for (let i = 0; ; i++) {
 
@@ -101,7 +100,7 @@ export class ReadPKPContract {
         tokens.push(token);
 
       } catch (e) {
-        console.log(`[getTokensByAddress] Ended search on index: ${i}`)
+        console.log(`[Lit Swap Playground] - [getTokensByAddress] Ended search on index: ${i}`)
         break;
       }
     }
@@ -140,7 +139,7 @@ export class ReadPKPContract {
         tokens.push(token);
 
       } catch (e) {
-        console.log(`[getTokensByAddress] Ended search on index: ${i}`)
+        console.log(`[Lit Swap Playground] - [getTokensByAddress] Ended search on index: ${i}`)
         break;
       }
     }

@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { Interface } from "@ethersproject/abi";
 import LitJsSdk from "lit-js-sdk";
 
+// This is the same code that performs swaps on this page, but all in one file
 // example stub data, can be used or not
 const stubTokenIn = {
   chainId: 137,

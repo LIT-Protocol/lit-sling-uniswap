@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
-import truncateAddress from "../helpers/truncateAddress";
-import { colorArray } from "../assets/colorArray";
+import { longerTruncateAddress } from "../../helpers/truncateAddress";
+import { colorArray } from "../../assets/colorArray";
 
 function PkpCard({pkp, setSelectedPkp, i}) {
   const backgroundColor = colorArray[i % colorArray.length];
@@ -12,7 +12,7 @@ function PkpCard({pkp, setSelectedPkp, i}) {
         <Stack spacing={2}>
           <Stack>
             <Typography variant={'body1'}>Address:</Typography>
-            <Typography variant={'body1'}>{truncateAddress(pkp.address)}</Typography>
+            <Typography variant={'body1'}>{longerTruncateAddress(pkp.address)}</Typography>
           </Stack>
           <Button variant={'outlined'} onClick={() => setSelectedPkp(pkp)}>Select</Button>
         </Stack>

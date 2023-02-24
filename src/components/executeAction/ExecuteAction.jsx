@@ -17,11 +17,11 @@ function ExecuteAction() {
     // setProvider(polygonProvider);
     const authSigHolder = localStorage.getItem('lit-auth-signature');
     if (authSigHolder) {
-      console.log('Auth sig found in local storage');
+      console.log('[Lit Swap Playground] - Auth sig found in local storage');
       setAuthSig(JSON.parse(authSigHolder));
       setLoading(false);
     } else {
-      console.log('Auth sig not found in local storage');
+      console.log('[Lit Swap Playground] - Auth sig not found in local storage');
       logInWithLit();
     }
   }, [])
@@ -44,13 +44,13 @@ function ExecuteAction() {
       litNodeClient = new LitJsSdk.LitNodeClient({litNetwork: "serrano", debug: false});
       await litNodeClient.connect();
     } catch (err) {
-      console.log('Unable to connect to network', err);
+      console.log('[Lit Swap Playground] - Unable to connect to network', err);
       setOutput('Unable to connect to network' + prettifyText(err));
       return;
     }
 
     if (!litNodeClient) {
-      console.log('LitNodeClient was not instantiated');
+      console.log('[Lit Swap Playground] - LitNodeClient was not instantiated');
       setOutput('LitNodeClient was not instantiated');
       return;
     }
@@ -62,9 +62,8 @@ function ExecuteAction() {
         authSig,
         jsParams: JSON.parse(jsParams),
       });
-      console.log('executeRes', executeRes);
     } catch (err) {
-      console.log('Unable to execute code', err);
+      console.log('[Lit Swap Playground] - Unable to execute code', err);
       setOutput('Unable to execute code' + prettifyText(err));
       setLoading(false);
       return;
