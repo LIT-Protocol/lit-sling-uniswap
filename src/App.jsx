@@ -75,17 +75,16 @@ function App() {
               <Fragment>
                 <Button
                   id="basic-button"
-                  color={'secondary'}
+                  color={'primary'}
                   // sx={{backgroundColor: '#0a132d', color: '#fff'}}
                   onClick={handleClick}
-                  variant={'contained'}
+                  variant={'outlined'}
                   endIcon={<ArrowDropDown/>}
                 >
                   Selected PKP: {truncateAddress(selectedPkp.address)}
                 </Button>
                 <Menu
                   id="basic-menu"
-                  color={'secondary'}
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleClose}
