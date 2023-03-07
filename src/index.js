@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import { RecoilRoot } from "recoil";
 
 const theme = createTheme({
   palette: {
@@ -21,9 +22,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App/>
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <App/>
+        </BrowserRouter>
+      </RecoilRoot>
     </ThemeProvider>
   </React.StrictMode>
 );

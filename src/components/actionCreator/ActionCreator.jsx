@@ -55,6 +55,10 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     getCurrencyAmounts(pkp.address, 'tokenOut');
   }, [ tokenOut ])
 
+  useEffect(() => {
+    getCurrencyAmounts(pkp.address);
+  }, [ pkp ])
+
   const prettifyText = (text) => {
     return JSON.stringify(text, undefined, 4);
   }
@@ -62,6 +66,7 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
   const getCurrencyAmounts = async (address, tokenType = null) => {
     setLoading(true);
     try {
+      console.log('[Lit Swap Playground] - ActionCreator - getCurrencyAmounts');
       const contract0 = new ethers.Contract(tokenIn.address, ERC20ABI, provider);
       const contract1 = new ethers.Contract(tokenOut.address, ERC20ABI, provider);
       const tokenInBalance = await contract0.balanceOf(address);
