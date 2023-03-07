@@ -16,9 +16,9 @@ const darkTheme = createTheme({
     primary: {
       main: '#fff',
     },
-    secondary: {
-      main: '#0a132d'
-    },
+    // secondary: {
+    //   main: '#0a132d'
+    // },
     typography: {
       fontFamily: [
         "Figtree", "Space Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "sans-serif"
