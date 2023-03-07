@@ -20,7 +20,6 @@ export function refactoredSwapCode() {
 
   return `
     async function makeSwapData() {
-      console.log('gasPrice', gasPrice)
       const approveTx = {
           to: tokenIn.address,
           nonce: nonceCount,

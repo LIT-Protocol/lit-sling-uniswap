@@ -6,6 +6,7 @@
     "@babel/runtime": "^7.20.13",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.115",
     "@mui/material": "^5.11.4",
     "@testing-library/jest-dom": "^5.16.5",
@@ -20,6 +21,7 @@
     "react-scripts": "^5.0.1",
     "react-select": "^5.7.0",
     "react-windowed-select": "^5.1.0",
+    "recoil": "^0.7.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

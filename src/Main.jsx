@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { loadUserPkps } from "./helpers/loadUserPkps";
 import { ethers } from "ethers";
@@ -6,17 +6,32 @@ import { createPkpWallet } from "./helpers/createPkpWallet";
 import ActionCreator from "./components/actionCreator/ActionCreator";
 import PkpDisplay from "./components/pkpDisplay/PkpDisplay";
 import './Main.css';
+import { useRecoilState } from "recoil";
+import {
+  authSigState,
+  errorObjectState,
+  loadingState,
+  pkpWalletState,
+  providerState,
+  selectedPkpState,
+  userPkpsState
+} from "./context/appContext";
 
 function Main() {
-  const [ provider, setProvider ] = useState(null);
-  const [ loading, setLoading ] = useState(true);
-  const [ userPkps, setUserPkps ] = useState(null);
-  const [ selectedPkp, setSelectedPkp ] = useState(null);
-  const [ pkpWallet, setPkpWallet ] = useState(null);
-  const [ authSig, setAuthSig ] = useState(null);
-  const [ errorObject, setErrorObject ] = useState(null);
+  const [ loading, setLoading ] = useRecoilState(loadingState);
+  const [ provider, setProvider ] = useRecoilState(providerState);
+  const [ userPkps, setUserPkps ] = useRecoilState(userPkpsState);
+  const [ selectedPkp, setSelectedPkp ] = useRecoilState(selectedPkpState);
+  const [ pkpWallet, setPkpWallet ] = useRecoilState(pkpWalletState);
+  const [ authSig, setAuthSig ] = useRecoilState(errorObjectState);
+  const [ errorObject, setErrorObject ] = useRecoilState(authSigState);
 
   useEffect(() => {
+    const currentTime = Date.now();
+    const lastLogin = localStorage.getItem('lit-last-login');
+    if (!!lastLogin && parseInt(lastLogin) < currentTime) {
+      localStorage.removeItem('lit-auth-signature');
+    }
     getProvider()
   }, [])
 
@@ -43,6 +58,8 @@ function Main() {
       const loadPkpRes = await loadUserPkps();
       setUserPkps(loadPkpRes.tokenObjs);
       setAuthSig(loadPkpRes.authSig);
+      const aDayAhead = Date.now() + 86400000;
+      localStorage.setItem('lit-login-time', aDayAhead.toString());
       console.log('[Lit Swap Playground] - Main - getPkps', loadPkpRes);
     } catch (err) {
       console.log('err', err);
@@ -50,9 +67,10 @@ function Main() {
     setLoading(false);
   }
 
-  // make pkp signer once user selectes a pkp
+  // make pkp signer once user selects a pkp
   const makePkpWallet = async (pkpData) => {
     setLoading(true);
+    console.log('[Lit Swap Playground] - Main - makePkpWallet', pkpData);
     setSelectedPkp(pkpData);
     let pkpWalletRes;
     try {
@@ -87,7 +105,7 @@ function Main() {
   }
 
   // the lit action playground
-  if (!!pkpWallet) {
+  if (!!pkpWallet && !!selectedPkp) {
     return (
       <div className="App">
         <ActionCreator provider={provider}
