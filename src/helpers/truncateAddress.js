@@ -6,7 +6,7 @@ const truncateAddress = (address) => {
 
 const longerTruncateAddress = (address) => {
   const part1 = address.slice(0, 10);
-  const part2 = address.slice(-10);
+  const part2 = address.slice(-6);
   return `${part1}…${part2}`;
 };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, Stack, TextField, Typography } from "@mui/material";
+import { Card, CardContent, IconButton, Stack, TextField, Typography } from "@mui/material";
 import './ActionCreator.css';
 import { LoadingButton } from "@mui/lab";
 import { ethers } from "ethers";
@@ -11,6 +11,7 @@ import LitTokenSelect from "../litTokenSelect/LitTokenSelect";
 import LitJsSdk from "lit-js-sdk";
 import { joinAndSignTx } from "../../helpers/joinAndSignTx";
 import { longerTruncateAddress } from "../../helpers/truncateAddress";
+import { ContentCopy } from "@mui/icons-material";
 
 // const providerUrl = 'https://polygon-mainnet.infura.io/v3/3a16fe149ab14c7995cdab5f2c1d616c';
 const SWAP_ROUTER_ADDRESS = '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45';
@@ -209,6 +210,10 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
     )
   }
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+  }
+
   return (
     <div className={'center fade-in action-creator-container'}>
       <Stack spacing={2}>
@@ -217,7 +222,12 @@ function ActionCreator({pkp, provider, pkpWallet, authSig}) {
             {/*<CardHeader title={`PKP: ${truncateAddress(pkp.address)}`}/>*/}
             <CardContent className={'action-creator-input'}>
               <Stack spacing={2}>
-                <Typography variant={'h5'}>{`PKP: ${longerTruncateAddress(pkp.address)}`}</Typography>
+                <Stack spacing={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <Typography variant={'h5'}>{`PKP: ${longerTruncateAddress(pkp.address)}`}</Typography>
+                  <IconButton onClick={() => copyToClipboard(pkp.address)}>
+                    <ContentCopy/>
+                  </IconButton>
+                </Stack>
                 <Typography variant={'h6'}>Create a Lit Action</Typography>
                 <Typography color={'error'}> Polygon only. Execute swaps at your own risk.</Typography>
                 <Stack spacing={1}>
